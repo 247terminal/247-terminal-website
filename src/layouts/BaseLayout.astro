@@ -25,6 +25,19 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site)
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 
+  <!-- DNS Prefetch & Preconnect for third-party resources -->
+  <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
+  <link rel="dns-prefetch" href="https://www.clarity.ms" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+  <!-- Preload critical font -->
+  <link
+    rel="preload"
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+    as="style"
+  />
+
   <!-- Primary Meta Tags -->
   <title>{title}</title>
   <meta name="title" content={title} />
@@ -46,8 +59,6 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site)
   <meta property="twitter:image" content={new URL(image, Astro.site)} />
 
   <!-- Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
 
   <!-- Google Tag Manager -->

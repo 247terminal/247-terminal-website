@@ -1,0 +1,31 @@
+version: '3.8'
+
+services:
+  247terminal-website:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: 247terminal-website
+    restart: unless-stopped
+    ports:
+      - "3080:80"
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:80/"]
+      interval: 30s
+      timeout: 3s
+      retries: 3
+      start_period: 5s
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 128M
+        reservations:
+          cpus: '0.1'
+          memory: 32M
+
+networks:
+  default:
+    name: 247terminal-network
