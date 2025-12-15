@@ -16,7 +16,7 @@ const plans = [
       'Discord community access',
     ],
     cta: 'Get Launch Pricing',
-    href: 'https://whop.com/247terminal/',
+    checkoutPlan: 'monthly',
     popular: false,
   },
   {
@@ -31,11 +31,9 @@ const plans = [
       'Priority support',
       'Early access to new features',
       'Locked-in pricing',
-      'Custom alerts setup',
-      'Strategy consultation',
     ],
     cta: 'Save Now',
-    href: 'https://whop.com/247terminal/',
+    checkoutPlan: 'yearly',
     popular: true,
   },
   {
@@ -53,7 +51,7 @@ const plans = [
       'Dedicated support',
     ],
     cta: 'Join Waitlist',
-    href: '#',
+    checkoutPlan: null,
     popular: false,
     comingSoon: true,
   },
@@ -135,18 +133,18 @@ const plans = [
           </ul>
 
           {/* CTA */}
-          <a
-            href={plan.href}
+          <button
+            type="button"
+            data-checkout-plan={plan.checkoutPlan}
             class:list={[
               'btn w-full justify-center',
               plan.popular ? 'btn-primary' : 'btn-secondary',
               plan.comingSoon && 'opacity-50 cursor-not-allowed pointer-events-none'
             ]}
-            target={plan.comingSoon ? undefined : '_blank'}
-            rel={plan.comingSoon ? undefined : 'noopener noreferrer'}
+            disabled={plan.comingSoon}
           >
             {plan.cta}
-          </a>
+          </button>
 
           {/* Trust note */}
           {!plan.comingSoon && (
@@ -175,3 +173,14 @@ const plans = [
     </div>
   </div>
 </section>
+
+<script>
+  document.querySelectorAll('[data-checkout-plan]').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var plan = btn.getAttribute('data-checkout-plan');
+      if (plan && typeof window.openCheckoutModal === 'function') {
+        window.openCheckoutModal(plan);
+      }
+    });
+  });
+</script>

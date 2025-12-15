@@ -1,0 +1,211 @@
+---
+interface Props {
+  affiliate?: string
+}
+
+const { affiliate } = Astro.props
+---
+
+<div
+  id="checkout-modal"
+  class="fixed inset-0 z-[100] hidden overflow-y-auto"
+  data-affiliate={affiliate || ''}
+>
+  <div class="fixed inset-0 bg-black/80 backdrop-blur-sm" id="checkout-backdrop"></div>
+
+  <div class="relative z-10 flex flex-col items-center min-h-full px-4 py-10">
+    <button
+      id="checkout-close"
+      class="fixed top-4 right-4 z-[101] p-2 text-text-secondary hover:text-text-primary transition-colors bg-bg-surface/80 rounded-full cursor-pointer"
+      aria-label="Close checkout"
+    >
+      <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+      </svg>
+    </button>
+
+    <h2 class="text-2xl font-bold mb-2">247 Terminal</h2>
+    <p class="text-text-secondary mb-6">Get instant access to the terminal</p>
+
+    <div class="flex gap-2 mb-6 p-1 bg-bg-surface rounded-lg border border-border">
+      <button
+        id="modal-btn-monthly"
+        class="px-6 py-2 rounded-md font-medium transition-all duration-200 bg-accent text-white cursor-pointer"
+        data-plan="monthly"
+      >
+        Monthly
+      </button>
+      <button
+        id="modal-btn-yearly"
+        class="px-6 py-2 rounded-md font-medium transition-all duration-200 text-text-secondary hover:text-text-primary cursor-pointer"
+        data-plan="yearly"
+      >
+        Yearly
+      </button>
+    </div>
+
+    <div class="w-full max-w-[500px] card-elevated overflow-hidden mb-10">
+      {affiliate ? (
+        <>
+          <div
+            id="modal-checkout-monthly"
+            data-whop-checkout-plan-id="plan_tbvYH5ifTxJDz"
+            data-whop-checkout-theme="dark"
+            data-whop-checkout-on-complete="onCheckoutComplete"
+            data-whop-checkout-affiliate-code={affiliate}
+            style="width: 100%; min-height: 600px;"
+          ></div>
+          <div
+            id="modal-checkout-yearly"
+            data-whop-checkout-plan-id="plan_ecJQQJGSGpWOa"
+            data-whop-checkout-theme="dark"
+            data-whop-checkout-on-complete="onCheckoutComplete"
+            data-whop-checkout-affiliate-code={affiliate}
+            style="width: 100%; min-height: 600px; display: none;"
+          ></div>
+        </>
+      ) : (
+        <>
+          <div
+            id="modal-checkout-monthly"
+            data-whop-checkout-plan-id="plan_tbvYH5ifTxJDz"
+            data-whop-checkout-theme="dark"
+            data-whop-checkout-on-complete="onCheckoutComplete"
+            style="width: 100%; min-height: 600px;"
+          ></div>
+          <div
+            id="modal-checkout-yearly"
+            data-whop-checkout-plan-id="plan_ecJQQJGSGpWOa"
+            data-whop-checkout-theme="dark"
+            data-whop-checkout-on-complete="onCheckoutComplete"
+            style="width: 100%; min-height: 600px; display: none;"
+          ></div>
+        </>
+      )}
+    </div>
+  </div>
+
+  <div
+    id="license-result"
+    class="hidden fixed bottom-5 left-1/2 -translate-x-1/2 p-8 card-elevated text-center z-[110] max-w-[500px] w-[calc(100%-40px)]"
+    style="box-shadow: var(--shadow-xl);"
+  ></div>
+</div>
+
+<script is:inline>
+  (function() {
+    var modal = document.getElementById('checkout-modal');
+    var backdrop = document.getElementById('checkout-backdrop');
+    var closeBtn = document.getElementById('checkout-close');
+    var btnMonthly = document.getElementById('modal-btn-monthly');
+    var btnYearly = document.getElementById('modal-btn-yearly');
+    var checkoutMonthly = document.getElementById('modal-checkout-monthly');
+    var checkoutYearly = document.getElementById('modal-checkout-yearly');
+    var scrollPosition = 0;
+
+    function openModal(plan) {
+      scrollPosition = window.pageYOffset;
+      document.body.style.position = 'fixed';
+      document.body.style.top = '-' + scrollPosition + 'px';
+      document.body.style.left = '0';
+      document.body.style.right = '0';
+      document.body.style.overflow = 'hidden';
+      modal.classList.remove('hidden');
+      if (plan === 'yearly') {
+        switchPlan('yearly');
+      } else {
+        switchPlan('monthly');
+      }
+    }
+
+    function closeModal() {
+      modal.classList.add('hidden');
+      document.body.style.position = '';
+      document.body.style.top = '';
+      document.body.style.left = '';
+      document.body.style.right = '';
+      document.body.style.overflow = '';
+      window.scrollTo(0, scrollPosition);
+    }
+
+    function switchPlan(plan) {
+      if (plan === 'monthly') {
+        checkoutMonthly.style.display = 'block';
+        checkoutYearly.style.display = 'none';
+        btnMonthly.className = 'px-6 py-2 rounded-md font-medium transition-all duration-200 bg-accent text-white cursor-pointer';
+        btnYearly.className = 'px-6 py-2 rounded-md font-medium transition-all duration-200 text-text-secondary hover:text-text-primary cursor-pointer';
+      } else {
+        checkoutMonthly.style.display = 'none';
+        checkoutYearly.style.display = 'block';
+        btnYearly.className = 'px-6 py-2 rounded-md font-medium transition-all duration-200 bg-accent text-white cursor-pointer';
+        btnMonthly.className = 'px-6 py-2 rounded-md font-medium transition-all duration-200 text-text-secondary hover:text-text-primary cursor-pointer';
+      }
+    }
+
+    backdrop.addEventListener('click', closeModal);
+    closeBtn.addEventListener('click', closeModal);
+    btnMonthly.addEventListener('click', function() { switchPlan('monthly'); });
+    btnYearly.addEventListener('click', function() { switchPlan('yearly'); });
+
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') closeModal();
+    });
+
+    window.openCheckoutModal = openModal;
+    window.closeCheckoutModal = closeModal;
+
+    function copyLicense(text, btn, event) {
+      event.stopPropagation();
+      navigator.clipboard.writeText(text).then(function() {
+        btn.textContent = 'Copied!';
+        btn.style.background = 'var(--color-success)';
+        btn.style.color = 'var(--color-bg-base)';
+        setTimeout(function() {
+          window.location.href = 'https://app.247terminal.com';
+        }, 1000);
+      });
+    }
+
+    window.copyLicense = copyLicense;
+
+    window.onCheckoutComplete = async function(planId, receiptId) {
+      console.log('Checkout complete!');
+      console.log('planId:', planId);
+      console.log('receiptId:', receiptId);
+
+      var resultDiv = document.getElementById('license-result');
+
+      resultDiv.innerHTML = '<h3 class="text-success text-2xl font-bold mb-5">Purchase Successful!</h3>' +
+        '<p class="text-text-secondary">Retrieving your license key...</p>';
+      resultDiv.classList.remove('hidden');
+
+      try {
+        var response = await fetch('https://web.247terminal.com/v1/app/license/checkout/' + receiptId);
+
+        if (!response.ok) {
+          throw new Error('Failed to fetch license');
+        }
+
+        var data = await response.json();
+
+        if (data.status !== 'success' || !data.data || !data.data.license_key) {
+          throw new Error('Invalid response');
+        }
+
+        var licenseKey = data.data.license_key;
+        resultDiv.innerHTML = '<h3 class="text-success text-2xl font-bold mb-5">Purchase Successful!</h3>' +
+          '<p class="text-text-secondary mb-4">Your license key:</p>' +
+          '<div class="flex items-center bg-bg-base rounded-lg my-5 border border-border overflow-hidden">' +
+            '<code class="flex-1 px-5 py-4 text-lg text-success break-all text-left">' + licenseKey + '</code>' +
+            '<button onclick="copyLicense(\'' + licenseKey + '\', this, event)" class="px-4 py-2 mx-2 bg-bg-overlay border-none rounded-md text-text-secondary cursor-pointer text-sm hover:bg-bg-elevated hover:text-text-primary transition-colors">Copy</button>' +
+          '</div>' +
+          '<p class="text-text-secondary"><strong>Important:</strong> This key is the only way to login to <a href="https://app.247terminal.com" target="_blank" class="text-info hover:underline">247 Terminal</a>. Make sure to save it!</p>';
+      } catch (error) {
+        console.error('Error:', error);
+        resultDiv.innerHTML = '<h3 class="text-success text-2xl font-bold mb-5">Purchase Successful!</h3>' +
+          '<p class="text-text-secondary">Redirecting you to view your license...</p>';
+        window.open('https://whop.com/joined/247terminal/claim-terminal-access-here-NhzDq71qWJFcz5/app/', '_blank');
+      }
+    };
+  })();
+</script>

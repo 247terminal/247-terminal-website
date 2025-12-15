@@ -10,7 +10,7 @@ const navLinks = [
 
 <header
   id="header"
-  class="fixed top-0 inset-x-0 z-50 transition-all duration-300 overflow-hidden w-full max-w-[100vw]"
+  class="fixed top-0 inset-x-0 z-50 transition-all duration-300 overflow-hidden w-full max-w-[100vw] border-b border-transparent"
 >
   <div class="container">
     <nav class="flex items-center justify-between h-16 md:h-20">
@@ -88,14 +88,14 @@ const navLinks = [
     const heroBottom = heroSection?.getBoundingClientRect().bottom ?? 0
     const scrolledPastHero = heroBottom < 100
 
-    // Glass overlay appears on any scroll
     if (window.scrollY > 50) {
-      header?.classList.add('glass', 'shadow-lg')
+      header?.classList.add('bg-bg-surface/70', 'backdrop-blur-xl', 'shadow-lg', 'border-border')
+      header?.classList.remove('border-transparent')
     } else {
-      header?.classList.remove('glass', 'shadow-lg')
+      header?.classList.remove('bg-bg-surface/70', 'backdrop-blur-xl', 'shadow-lg', 'border-border')
+      header?.classList.add('border-transparent')
     }
 
-    // Nav items only appear after scrolling past hero
     if (scrolledPastHero) {
       navLinks?.classList.remove('opacity-0', 'pointer-events-none')
       navLinks?.classList.add('opacity-100', 'pointer-events-auto')

@@ -104,6 +104,9 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site)
   <!-- Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
 
+  <!-- Whop Checkout SDK -->
+  <script async defer src="https://js.whop.com/static/checkout/loader.js"></script>
+
   <!-- Google Tag Manager -->
   <script is:inline>
     (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
@@ -140,5 +143,7 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site)
   </main>
 
   <Footer />
+
+  <slot name="modal" />
 </body>
 </html>
