@@ -1,5 +1,6 @@
 ---
 import LogoCarousel from '../ui/LogoCarousel.astro';
+import VideoPlayer from '../interactive/VideoPlayer';
 ---
 
 <section id="hero" class="relative min-h-screen flex items-center gradient-hero overflow-hidden">
@@ -28,17 +29,7 @@ import LogoCarousel from '../ui/LogoCarousel.astro';
         <!-- Hero Visual - Shows here on mobile only -->
         <div class="relative max-w-full mb-8 lg:hidden">
           <div class="relative rounded-lg overflow-hidden bg-bg-surface border border-accent/40 p-1" style="box-shadow: 0 4px 6px rgba(0, 0, 0, 0.4), 0 10px 20px rgba(0, 0, 0, 0.3);">
-            <img
-              src="/images/screenshot.webp"
-              alt="247 Terminal - Trading interface with real-time charts and news feed"
-              class="w-full h-auto"
-              loading="eager"
-            />
-            <div class="absolute inset-0 bg-gradient-to-t from-bg-base/30 to-transparent pointer-events-none" />
-            <div class="absolute bottom-3 left-1/2 -translate-x-1/2 inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-bg-base/80 backdrop-blur-sm border border-accent/30">
-              <span class="w-2 h-2 rounded-full bg-success animate-pulse" />
-              <span class="text-xs font-medium text-white">Live News Trading</span>
-            </div>
+            <VideoPlayer client:visible videoId="1146474871" title="247 Terminal Demo" />
           </div>
           <!-- Exchange carousel - mobile only -->
           <div class="mt-10">
@@ -68,17 +59,7 @@ import LogoCarousel from '../ui/LogoCarousel.astro';
       <!-- Hero Visual - Shows here on desktop only -->
       <div class="relative max-w-full self-start hidden lg:block">
         <div class="relative rounded-lg overflow-hidden bg-bg-surface border border-accent/40 p-1" style="box-shadow: 0 4px 6px rgba(0, 0, 0, 0.4), 0 10px 20px rgba(0, 0, 0, 0.3);">
-          <img
-            src="/images/screenshot.webp"
-            alt="247 Terminal - Trading interface with real-time charts and news feed"
-            class="w-full h-auto"
-            loading="eager"
-          />
-          <div class="absolute inset-0 bg-gradient-to-t from-bg-base/30 to-transparent pointer-events-none" />
-          <div class="absolute bottom-4 left-1/2 -translate-x-1/2 inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-bg-base/80 backdrop-blur-sm border border-accent/30">
-            <span class="w-2 h-2 rounded-full bg-success animate-pulse" />
-            <span class="text-sm font-medium text-white">Live News Trading</span>
-          </div>
+          <VideoPlayer client:visible videoId="1146474871" title="247 Terminal Demo" />
         </div>
       </div>
     </div>

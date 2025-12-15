@@ -58,6 +58,49 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site)
   <meta property="twitter:description" content={description} />
   <meta property="twitter:image" content={new URL(image, Astro.site)} />
 
+  <!-- Structured Data - Organization -->
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "247 Terminal",
+    "url": "https://247terminal.com",
+    "logo": "https://247terminal.com/favicon.svg",
+    "description": "Professional crypto news trading platform with millisecond news delivery and one-click execution across multiple exchanges.",
+    "sameAs": [
+      "https://twitter.com/247terminal",
+      "https://discord.gg/247terminal"
+    ],
+    "contactPoint": {
+      "@type": "ContactPoint",
+      "email": "getincontact@247terminal.com",
+      "contactType": "customer support"
+    }
+  })} />
+
+  <!-- Structured Data - WebSite -->
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "247 Terminal",
+    "url": "https://247terminal.com"
+  })} />
+
+  <!-- Structured Data - SoftwareApplication -->
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "247 Terminal",
+    "applicationCategory": "FinanceApplication",
+    "operatingSystem": "Web",
+    "description": "Crypto news trading platform with millisecond news delivery and one-click execution.",
+    "offers": {
+      "@type": "Offer",
+      "price": "99",
+      "priceCurrency": "USD",
+      "priceValidUntil": "2025-12-31"
+    }
+  })} />
+
   <!-- Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
 
