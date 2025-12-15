@@ -7,6 +7,7 @@ import tailwindcss from '@tailwindcss/vite';
 export default defineConfig({
   site: 'https://247terminal.com',
   output: 'static',
+  trailingSlash: 'never',
   compressHTML: true,
   build: {
     inlineStylesheets: 'auto',
