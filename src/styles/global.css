@@ -298,6 +298,24 @@ body {
 .stagger > *:nth-child(5) { animation-delay: 400ms; }
 .stagger > *:nth-child(6) { animation-delay: 500ms; }
 
+.logo-text {
+  fill: var(--color-text-primary);
+  transition: fill var(--duration-normal) var(--ease-out);
+}
+
+.logo-accent {
+  fill: #ff0000;
+  transition: fill var(--duration-normal) var(--ease-out);
+}
+
+.group:hover .logo-text {
+  fill: #ff0000;
+}
+
+.group:hover .logo-accent {
+  fill: var(--color-text-primary);
+}
+
 /* Reduced motion */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
