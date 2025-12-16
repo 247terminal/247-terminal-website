@@ -151,13 +151,13 @@ export default function LiveStats({ apiUrl }: LiveStatsProps) {
           <>
             <div class="flex flex-col items-center py-4 px-3 sm:px-4">
               <div class="text-xl sm:text-2xl font-bold text-success leading-none">
-                {currentSentiment.longs.toLocaleString()}
+                <AnimatedCounter value={currentSentiment.longs} />
               </div>
               <div class="text-xs text-text-tertiary mt-1">Long</div>
             </div>
             <div class="flex flex-col items-center py-4 px-3 sm:px-4">
               <div class="text-xl sm:text-2xl font-bold text-accent leading-none">
-                {currentSentiment.shorts.toLocaleString()}
+                <AnimatedCounter value={currentSentiment.shorts} />
               </div>
               <div class="text-xs text-text-tertiary mt-1">Short</div>
             </div>
