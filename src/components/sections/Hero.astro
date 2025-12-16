@@ -1,6 +1,7 @@
 ---
 import LogoCarousel from '../ui/LogoCarousel.astro';
 import VideoPlayer from '../interactive/VideoPlayer';
+import LiveStats from '../interactive/LiveStats';
 ---
 
 <section id="hero" class="relative min-h-screen flex items-center gradient-hero overflow-hidden">
@@ -31,6 +32,7 @@ import VideoPlayer from '../interactive/VideoPlayer';
           <div class="relative rounded-lg overflow-hidden bg-bg-surface border border-accent/40 p-1" style="box-shadow: 0 4px 6px rgba(0, 0, 0, 0.4), 0 10px 20px rgba(0, 0, 0, 0.3);">
             <VideoPlayer client:visible videoId="1146474871" title="247 Terminal Demo" />
           </div>
+          <LiveStats client:visible apiUrl="https://web.247terminal.com/v1/website/stats" />
           <!-- Exchange carousel - mobile only -->
           <div class="mt-10">
             <LogoCarousel />
@@ -61,6 +63,8 @@ import VideoPlayer from '../interactive/VideoPlayer';
         <div class="relative rounded-lg overflow-hidden bg-bg-surface border border-accent/40 p-1" style="box-shadow: 0 4px 6px rgba(0, 0, 0, 0.4), 0 10px 20px rgba(0, 0, 0, 0.3);">
           <VideoPlayer client:visible videoId="1146474871" title="247 Terminal Demo" />
         </div>
+
+        <LiveStats client:visible apiUrl="https://web.247terminal.com/v1/website/stats" />
       </div>
     </div>
   </div>
