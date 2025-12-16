@@ -67,20 +67,31 @@ function AnimatedCounter({ value, duration = 2000 }: { value: number; duration?:
   )
 }
 
+interface Sentiment {
+  long_percentage: number
+  short_percentage: number
+  longs: number
+  shorts: number
+}
+
 export default function LiveStats({ apiUrl }: LiveStatsProps) {
   const [period, setPeriod] = useState<'7d' | '30d'>('7d')
-  const [showTooltip, setShowTooltip] = useState(false)
   const [trades7d, setTrades7d] = useState<number | null>(null)
   const [trades30d, setTrades30d] = useState<number | null>(null)
+  const [sentiment7d, setSentiment7d] = useState<Sentiment | null>(null)
+  const [sentiment30d, setSentiment30d] = useState<Sentiment | null>(null)
+  const [showTooltip, setShowTooltip] = useState(false)
 
   const fetchStats = useCallback(async () => {
     try {
       const response = await fetch(apiUrl)
       if (response.ok) {
         const data = await response.json()
-        if (data.success && data.data) {
+        if ((data.success || data.status === 'success') && data.data) {
           setTrades7d(data.data.trades_7d || 0)
           setTrades30d(data.data.trades_30d || 0)
+          setSentiment7d(data.data.sentiment_7d || null)
+          setSentiment30d(data.data.sentiment_30d || null)
         }
       }
     } catch (error) {
@@ -96,74 +107,101 @@ export default function LiveStats({ apiUrl }: LiveStatsProps) {
 
   const isLoading = trades7d === null || trades30d === null
   const currentValue = period === '7d' ? (trades7d ?? 0) : (trades30d ?? 0)
+  const currentSentiment = period === '7d' ? sentiment7d : sentiment30d
 
   if (isLoading) {
     return (
-      <div class="mt-6 relative rounded-xl border border-border bg-bg-surface overflow-hidden animate-pulse">
-        <div class="px-4 py-1.5 border-b border-border">
-          <div class="h-4 w-20 bg-bg-elevated rounded" />
-        </div>
-        <div class="p-3 sm:p-4">
-          <div class="h-10 w-full bg-bg-elevated rounded" />
+      <div class="mt-4 flex justify-end">
+        <div
+          class="inline-flex items-center gap-3 px-4 py-2.5 rounded-lg animate-pulse"
+          style={{
+            background: 'rgba(24, 24, 27, 0.6)',
+            backdropFilter: 'blur(12px)',
+            WebkitBackdropFilter: 'blur(12px)',
+          }}
+        >
+          <div class="h-4 w-16 bg-white/10 rounded" />
+          <div class="h-5 w-20 bg-white/10 rounded" />
         </div>
       </div>
     )
   }
 
   return (
-    <div class="mt-6 relative rounded-xl border border-border bg-bg-surface overflow-hidden">
-
-      <div class="relative flex items-center justify-between px-4 py-1.5 border-b border-border">
-        <div class="flex items-center gap-2">
-          <span class="relative flex h-2 w-2">
-            <span class="absolute inline-flex h-full w-full rounded-full bg-success opacity-75 animate-[ping_2s_cubic-bezier(0,0,0.2,1)_infinite]" />
-            <span class="relative inline-flex rounded-full h-2 w-2 bg-success" />
-          </span>
-          <span class="text-xs font-medium text-text-tertiary">Live Stats</span>
-        </div>
-        <div class="relative">
-          <button
-            type="button"
-            class="text-text-tertiary hover:text-text-secondary transition-colors cursor-pointer"
-            onMouseEnter={() => setShowTooltip(true)}
-            onMouseLeave={() => setShowTooltip(false)}
-            onClick={() => setShowTooltip(!showTooltip)}
-          >
-            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-            </svg>
-          </button>
-          {showTooltip && (
-            <div class="absolute top-full right-0 mt-1 px-3 py-2 bg-bg-elevated border border-border rounded-lg text-xs text-text-secondary whitespace-nowrap z-10 -mr-2">
-              Real-time data from 247 Terminal users
-              <div class="absolute bottom-full right-[9px] border-4 border-transparent border-b-bg-elevated" />
-            </div>
-          )}
-        </div>
-      </div>
-
-      <div class="relative flex items-stretch p-3 sm:p-4">
-        <div class="shrink-0 pr-3 sm:pr-4 border-r border-border flex items-center">
-          <svg class="w-6 h-6 sm:w-8 sm:h-8 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
-          </svg>
-        </div>
-
-        <div class="flex-1 text-center min-w-0 flex flex-col justify-center">
-          <div class="text-xl sm:text-2xl lg:text-3xl font-bold text-white">
+    <div class="mt-4 flex justify-end">
+      <div
+        class="inline-flex items-center rounded-lg transition-all duration-300"
+        style={{
+          background: 'rgba(24, 24, 27, 0.7)',
+          backdropFilter: 'blur(16px)',
+          WebkitBackdropFilter: 'blur(16px)',
+          boxShadow: '0 4px 24px rgba(0, 0, 0, 0.2)',
+        }}
+      >
+        {/* Left - Trade count */}
+        <div class="flex flex-col items-center py-4 px-4 sm:px-5">
+          <div class="text-xl sm:text-2xl font-bold text-white leading-none">
             <AnimatedCounter value={currentValue} />
           </div>
-          <div class="text-text-secondary text-xs sm:text-sm">Trades Executed</div>
+          <div class="text-xs text-text-tertiary mt-1">Trades</div>
         </div>
 
-        <div class="shrink-0 pl-3 sm:pl-4 border-l border-border flex items-center">
-          <div class="flex flex-col gap-1">
+        {/* Middle - Sentiment */}
+        {currentSentiment && (
+          <>
+            <div class="flex flex-col items-center py-4 px-3 sm:px-4">
+              <div class="text-xl sm:text-2xl font-bold text-success leading-none">
+                {currentSentiment.longs.toLocaleString()}
+              </div>
+              <div class="text-xs text-text-tertiary mt-1">Long</div>
+            </div>
+            <div class="flex flex-col items-center py-4 px-3 sm:px-4">
+              <div class="text-xl sm:text-2xl font-bold text-accent leading-none">
+                {currentSentiment.shorts.toLocaleString()}
+              </div>
+              <div class="text-xs text-text-tertiary mt-1">Short</div>
+            </div>
+          </>
+        )}
+
+        {/* Right - Live + Period toggle */}
+        <div class="flex flex-col items-center gap-1 py-4 pl-4 sm:pl-6 pr-3 sm:pr-4 ml-2 border-l border-white/10 hover:bg-white/5 transition-colors rounded-r-lg">
+          <a
+            href={apiUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="relative flex items-center gap-2 hover:opacity-80 transition-opacity cursor-pointer"
+            onMouseEnter={() => setShowTooltip(true)}
+            onMouseLeave={() => setShowTooltip(false)}
+          >
+            <span class="relative flex h-2 w-2">
+              <span class="absolute inline-flex h-full w-full rounded-full bg-success opacity-75 animate-[ping_2s_cubic-bezier(0,0,0.2,1)_infinite]" />
+              <span class="relative inline-flex rounded-full h-2 w-2 bg-success" />
+            </span>
+            <span class="text-xs font-medium text-text-tertiary uppercase tracking-wider">Live</span>
+            {showTooltip && (
+              <div class="absolute left-1/2 -translate-x-1/2 bottom-full mb-2 px-3 py-1.5 bg-bg-elevated rounded-lg text-xs text-text-secondary whitespace-nowrap z-10"
+                style={{ boxShadow: '0 4px 12px rgba(0, 0, 0, 0.3)' }}
+              >
+                Real-time data from 247 Terminal
+                <div class="absolute top-full left-1/2 -translate-x-1/2 border-4 border-transparent border-t-bg-elevated" />
+              </div>
+            )}
+          </a>
+
+          {/* Period toggle */}
+          <div
+            class="flex items-center rounded-md p-0.5"
+            style={{
+              background: 'rgba(255, 255, 255, 0.06)',
+            }}
+          >
             <button
               type="button"
               onClick={() => setPeriod('7d')}
-              class={`px-2 py-1 text-xs font-medium rounded transition-colors cursor-pointer ${
+              class={`w-8 py-0.5 text-xs font-medium rounded transition-all duration-200 cursor-pointer ${
                 period === '7d'
-                  ? 'bg-accent text-white'
+                  ? 'bg-accent text-white shadow-sm'
                   : 'text-text-tertiary hover:text-text-secondary'
               }`}
             >
@@ -172,9 +210,9 @@ export default function LiveStats({ apiUrl }: LiveStatsProps) {
             <button
               type="button"
               onClick={() => setPeriod('30d')}
-              class={`px-2 py-1 text-xs font-medium rounded transition-colors cursor-pointer ${
+              class={`w-8 py-0.5 text-xs font-medium rounded transition-all duration-200 cursor-pointer ${
                 period === '30d'
-                  ? 'bg-accent text-white'
+                  ? 'bg-accent text-white shadow-sm'
                   : 'text-text-tertiary hover:text-text-secondary'
               }`}
             >
