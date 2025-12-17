@@ -113,15 +113,40 @@ export default function LiveStats({ apiUrl }: LiveStatsProps) {
     return (
       <div class="mt-4 flex justify-end">
         <div
-          class="inline-flex items-center gap-3 px-4 py-2.5 rounded-lg animate-pulse"
+          class="inline-flex items-center rounded-lg"
           style={{
-            background: 'rgba(24, 24, 27, 0.6)',
-            backdropFilter: 'blur(12px)',
-            WebkitBackdropFilter: 'blur(12px)',
+            background: 'rgba(24, 24, 27, 0.7)',
+            backdropFilter: 'blur(16px)',
+            WebkitBackdropFilter: 'blur(16px)',
+            boxShadow: '0 4px 24px rgba(0, 0, 0, 0.2)',
           }}
         >
-          <div class="h-4 w-16 bg-white/10 rounded" />
-          <div class="h-5 w-20 bg-white/10 rounded" />
+          {/* Left - Trade count placeholder */}
+          <div class="flex flex-col items-center py-4 px-4 sm:px-5">
+            <div class="h-6 sm:h-7 w-16 bg-white/10 rounded animate-pulse" />
+            <div class="h-3 w-10 bg-white/10 rounded mt-1 animate-pulse" />
+          </div>
+
+          {/* Middle - Sentiment placeholders */}
+          <div class="flex flex-col items-center py-4 px-3 sm:px-4">
+            <div class="h-6 sm:h-7 w-12 bg-white/10 rounded animate-pulse" />
+            <div class="h-3 w-8 bg-white/10 rounded mt-1 animate-pulse" />
+          </div>
+          <div class="flex flex-col items-center py-4 px-3 sm:px-4">
+            <div class="h-6 sm:h-7 w-12 bg-white/10 rounded animate-pulse" />
+            <div class="h-3 w-8 bg-white/10 rounded mt-1 animate-pulse" />
+          </div>
+
+          {/* Right - Live + Period toggle placeholder */}
+          <div class="flex flex-col items-center gap-1 py-4 pl-4 sm:pl-6 pr-3 sm:pr-4 ml-2 border-l border-white/[0.08] rounded-r-lg">
+            <div class="flex items-center gap-2">
+              <span class="relative flex h-2 w-2">
+                <span class="relative inline-flex rounded-full h-2 w-2 bg-white/20" />
+              </span>
+              <div class="h-3 w-6 bg-white/10 rounded animate-pulse" />
+            </div>
+            <div class="h-5 w-16 bg-white/10 rounded animate-pulse" />
+          </div>
         </div>
       </div>
     )
@@ -165,7 +190,7 @@ export default function LiveStats({ apiUrl }: LiveStatsProps) {
         )}
 
         {/* Right - Live + Period toggle */}
-        <div class="flex flex-col items-center gap-1 py-4 pl-4 sm:pl-6 pr-3 sm:pr-4 ml-2 border-l border-white/10 hover:bg-white/5 transition-colors rounded-r-lg">
+        <div class="flex flex-col items-center gap-1 py-4 pl-4 sm:pl-6 pr-3 sm:pr-4 ml-2 border-l border-white/[0.08] hover:bg-white/5 transition-colors rounded-r-lg">
           <a
             href={apiUrl}
             target="_blank"
