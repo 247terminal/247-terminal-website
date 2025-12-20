@@ -18,6 +18,7 @@ const plans = [
     cta: 'Get Launch Pricing',
     checkoutPlan: 'monthly',
     popular: false,
+    promoCode: 'PHASE2',
   },
   {
     name: 'Annual',
@@ -132,7 +133,12 @@ const plans = [
             ))}
           </ul>
 
-          {/* CTA */}
+          {plan.promoCode && (
+            <p class="text-text-secondary text-sm text-center mb-4">
+              Use code: <span class="text-accent font-semibold">{plan.promoCode}</span>
+            </p>
+          )}
+
           <button
             type="button"
             data-checkout-plan={plan.checkoutPlan}
